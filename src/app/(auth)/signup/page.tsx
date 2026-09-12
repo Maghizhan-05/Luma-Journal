@@ -7,9 +7,9 @@ export const metadata: Metadata = { title: "Sign up" };
 
 export default function SignupPage() {
   return (
-    <GlassCard padding="lg" strong>
-      <PopHeading as="h1" variant="sunset" className="mb-1 text-2xl">
-        Start your journal ✨
+    <GlassCard padding="lg">
+      <PopHeading as="h1" className="mb-1 text-2xl">
+        Start your <span className="marker peach">diary</span> ✨
       </PopHeading>
       <p className="mb-5 text-sm text-[color:var(--muted)]">
         One happy place for your days, photos, moments and money.

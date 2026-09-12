@@ -25,7 +25,7 @@ export function AppNav({ children }: { children?: React.ReactNode }) {
     <>
       {/* Top bar (all sizes) */}
       <header className="sticky top-0 z-30 px-3 pt-3 sm:px-4 sm:pt-4">
-        <nav className="glass glass-strong mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-[var(--r-pill)] px-3 py-2 sm:px-5">
+        <nav className="clay mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-[var(--r-pill)] px-3 py-2 sm:px-5">
           <Link href="/app" className="flex shrink-0 items-center gap-2 font-bold">
             <span className="text-lg">🗒️</span>
             <span className="pop-heading hidden text-lg sm:inline">{APP_NAME}</span>
@@ -41,7 +41,7 @@ export function AppNav({ children }: { children?: React.ReactNode }) {
                   href={l.href}
                   className={`rounded-[var(--r-pill)] px-3 py-1.5 text-sm font-semibold transition ${
                     active
-                      ? "bg-[color-mix(in_srgb,var(--grape)_16%,transparent)] text-[color:var(--grape)]"
+                      ? "bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] text-[color:var(--accent)]"
                       : "text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
                   }`}
                 >
@@ -56,7 +56,7 @@ export function AppNav({ children }: { children?: React.ReactNode }) {
       </header>
 
       {/* Bottom tab bar (mobile) */}
-      <nav className="glass glass-strong fixed inset-x-3 bottom-3 z-30 flex items-center justify-around rounded-[var(--r-pill)] px-1 py-1.5 md:hidden">
+      <nav className="clay fixed inset-x-3 bottom-3 z-30 flex items-center justify-around rounded-[var(--r-pill)] px-1 py-1.5 md:hidden">
         {links.map((l) => {
           const active = isActive(pathname, l.href, l.exact);
           return (
@@ -65,7 +65,7 @@ export function AppNav({ children }: { children?: React.ReactNode }) {
               href={l.href}
               aria-label={l.label}
               className={`flex min-w-0 flex-col items-center gap-0.5 rounded-[var(--r-md)] px-2 py-1 text-[0.62rem] font-semibold transition ${
-                active ? "text-[color:var(--grape)]" : "text-[color:var(--muted-2)]"
+                active ? "text-[color:var(--accent)]" : "text-[color:var(--muted-2)]"
               }`}
             >
               <span className="text-base leading-none">{l.emoji}</span>

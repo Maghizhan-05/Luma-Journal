@@ -1,77 +1,63 @@
 @import "tailwindcss";
 
 /*
-  Journal App — Design System
-  Apple glassmorphism (structure) × Gen-Z pop (color, motion, headings)
-  Theming: light by default; `.dark` on <html> overrides. Tokens live on :root.
+  LUMA — "your day's diary"
+  Design language: dark, mostly-black canvas + soft muted accents,
+  tactile "clay" surfaces (raised dark neumorphism), typewriter type.
+  The signature accent is a warm glow (LUMA = light) against near-black.
+  Color is used sparingly and softly — never loud, never pastel-girly.
 */
 
 :root {
-  /* Canvas + surfaces */
-  --bg: #f6f5fb;
-  --bg-tint-1: #fbe9f5; /* soft candy wash */
-  --bg-tint-2: #e6f0ff; /* soft sky wash */
-  --bg-tint-3: #e9fbf1; /* soft mint wash */
-  --surface: #ffffff;
-  --foreground: #1a1725;
-  --muted: #6b6780;
-  --muted-2: #8f8aa3;
-  --border: rgba(26, 23, 37, 0.08);
-  --hairline: rgba(26, 23, 37, 0.06);
+  /* Near-black canvas */
+  --bg: #0a0a0b;
+  --bg-2: #101012;
+  --paper: #161618;
 
-  /* Glass */
-  --glass-fill: rgba(255, 255, 255, 0.55);
-  --glass-fill-strong: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 8px 32px rgba(31, 20, 66, 0.10);
-  --glass-blur: 20px;
+  /* Raised clay surfaces */
+  --surface: #161618;
+  --clay: #17171a;
+  --clay-2: #1e1e22;
 
-  /* Gen-Z pop accents (each section gets one) */
-  --grape: #7c5cff;   /* Journal / brand */
-  --candy: #ff5db1;   /* Photo Wall */
-  --sunset: #ff8a3d;  /* Key Moments */
-  --mint: #22c8a6;    /* Finance / income */
-  --sky: #3d9bff;     /* Calendar / views */
-  --lemon: #ffcb45;   /* Streaks / highlights */
-  --coral: #ff6b6b;   /* Spend / alerts */
+  /* Text (soft off-white, never pure white) */
+  --ink: #f0ede6;
+  --ink-soft: #cfcbc2;
+  --muted: #948f85;
+  --muted-2: #66635c;
+  --line: rgba(255, 255, 255, 0.08);
+  --hairline: rgba(255, 255, 255, 0.05);
 
-  /* Semantic */
-  --accent: var(--grape);
-  --success: var(--mint);
-  --danger: var(--coral);
+  /* Soft, muted accents (used sparingly) */
+  --accent: #e6b566; /* warm gold glow — the LUMA signature */
+  --peach: #e0a17f;
+  --coral: #d97b6c;
+  --butter: #e6c07a;
+  --lemon: #dcc98a;
+  --sky: #86a7c9;
+  --mint: #7fb59d;
+  --lilac: #a99bcf;
+  --bubble: #b58fb0;
 
-  /* Gradients (playful headings + buttons) */
-  --grad-brand: linear-gradient(135deg, #7c5cff 0%, #ff5db1 100%);
-  --grad-sunset: linear-gradient(135deg, #ff8a3d 0%, #ff5db1 100%);
-  --grad-ocean: linear-gradient(135deg, #3d9bff 0%, #22c8a6 100%);
-  --grad-lemon: linear-gradient(135deg, #ffcb45 0%, #ff8a3d 100%);
+  --success: #7fb59d;
+  --danger: #d97b6c;
 
-  /* Radii + spacing rhythm (iOS card geometry) */
-  --r-sm: 10px;
-  --r-md: 16px;
-  --r-lg: 22px;
-  --r-xl: 30px;
+  /* Dark clay shadows: deep drop + faint top rim light + inner shade */
+  --clay-shadow:
+    8px 12px 28px rgba(0, 0, 0, 0.7),
+    2px 3px 8px rgba(0, 0, 0, 0.5);
+  --clay-inset:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.06),
+    inset -2px -3px 8px rgba(0, 0, 0, 0.55);
+  --clay-press:
+    inset 3px 4px 10px rgba(0, 0, 0, 0.7),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.04);
+
+  /* Chunky, huggable radii */
+  --r-sm: 14px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 36px;
   --r-pill: 999px;
-
-  color-scheme: light;
-}
-
-.dark {
-  --bg: #0c0a14;
-  --bg-tint-1: #17101c;
-  --bg-tint-2: #0f1524;
-  --bg-tint-3: #0c1a17;
-  --surface: #16131f;
-  --foreground: #f2effa;
-  --muted: #a7a1bd;
-  --muted-2: #7c7794;
-  --border: rgba(255, 255, 255, 0.10);
-  --hairline: rgba(255, 255, 255, 0.07);
-
-  --glass-fill: rgba(30, 26, 44, 0.55);
-  --glass-fill-strong: rgba(30, 26, 44, 0.74);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
 
   color-scheme: dark;
 }
@@ -79,19 +65,22 @@
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
+  --color-clay: var(--clay);
+  --color-ink: var(--ink);
+  --color-foreground: var(--ink);
   --color-muted: var(--muted);
   --color-muted-2: var(--muted-2);
-  --color-border: var(--border);
+  --color-line: var(--line);
 
-  --color-grape: var(--grape);
-  --color-candy: var(--candy);
-  --color-sunset: var(--sunset);
-  --color-mint: var(--mint);
-  --color-sky: var(--sky);
-  --color-lemon: var(--lemon);
-  --color-coral: var(--coral);
   --color-accent: var(--accent);
+  --color-peach: var(--peach);
+  --color-coral: var(--coral);
+  --color-butter: var(--butter);
+  --color-lemon: var(--lemon);
+  --color-sky: var(--sky);
+  --color-mint: var(--mint);
+  --color-lilac: var(--lilac);
+  --color-bubble: var(--bubble);
   --color-success: var(--success);
   --color-danger: var(--danger);
 
@@ -101,15 +90,13 @@
   --radius-xl: var(--r-xl);
   --radius-pill: var(--r-pill);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
-  --font-display: var(--font-display), var(--font-geist-sans), ui-rounded,
-    system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-mono: var(--font-body), ui-monospace, "Courier New", monospace;
+  --font-display: var(--font-display), var(--font-body), ui-monospace, monospace;
+  --font-sans: var(--font-body), ui-monospace, monospace;
 }
 
 * {
-  border-color: var(--border);
+  border-color: var(--line);
 }
 
 html {
@@ -118,88 +105,110 @@ html {
 
 body {
   min-height: 100dvh;
-  color: var(--foreground);
-  font-family: var(--font-sans);
+  color: var(--ink);
+  font-family: var(--font-body), ui-monospace, "Courier New", monospace;
+  font-size: 15px;
+  line-height: 1.65;
   background-color: var(--bg);
-  /* Soft aurora wash behind the frosted glass */
+  /* Faint accent glows for depth — barely-there soft light on black */
   background-image:
-    radial-gradient(60rem 60rem at 8% -10%, var(--bg-tint-1), transparent 55%),
-    radial-gradient(50rem 50rem at 100% 0%, var(--bg-tint-2), transparent 50%),
-    radial-gradient(55rem 55rem at 50% 120%, var(--bg-tint-3), transparent 55%);
+    radial-gradient(46rem 40rem at 12% -8%, rgba(230, 181, 102, 0.08), transparent 60%),
+    radial-gradient(42rem 42rem at 100% 4%, rgba(169, 155, 207, 0.06), transparent 55%),
+    radial-gradient(50rem 46rem at 50% 120%, rgba(127, 181, 157, 0.05), transparent 60%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* ---------- Reusable primitives ---------- */
+/* ---------- Clay primitives ---------- */
 
 @layer components {
-  .glass {
-    background: var(--glass-fill);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+  .clay {
+    background: var(--clay);
     border-radius: var(--r-lg);
+    box-shadow: var(--clay-shadow), var(--clay-inset);
+    border: 1px solid var(--hairline);
   }
 
-  .glass-strong {
-    background: var(--glass-fill-strong);
+  .clay-flat {
+    background: var(--surface);
+    border-radius: var(--r-md);
+    box-shadow: var(--clay-inset);
+    border: 1px solid var(--hairline);
   }
 
-  /* Playful gradient heading text */
-  .pop-heading {
-    font-family: var(--font-display);
+  .clay-well {
+    background: var(--bg-2);
+    border-radius: var(--r-md);
+    box-shadow: var(--clay-press);
+    border: 1px solid var(--hairline);
+  }
+
+  /* Typewriter display heading — soft off-white with real character */
+  .type-heading {
+    font-family: var(--font-display), ui-monospace, monospace;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    background: var(--grad-brand);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    line-height: 1.05;
   }
 
-  .pop-heading.sunset { background-image: var(--grad-sunset); -webkit-background-clip: text; background-clip: text; }
-  .pop-heading.ocean  { background-image: var(--grad-ocean);  -webkit-background-clip: text; background-clip: text; }
-  .pop-heading.lemon  { background-image: var(--grad-lemon);  -webkit-background-clip: text; background-clip: text; }
+  /* Highlighted word: soft accent color + faint glow (the pop on black) */
+  .marker {
+    color: var(--accent);
+    text-shadow: 0 0 22px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  .marker.peach { color: var(--peach); text-shadow: 0 0 22px color-mix(in srgb, var(--peach) 45%, transparent); }
+  .marker.mint  { color: var(--mint);  text-shadow: 0 0 22px color-mix(in srgb, var(--mint) 45%, transparent); }
+  .marker.sky   { color: var(--sky);   text-shadow: 0 0 22px color-mix(in srgb, var(--sky) 45%, transparent); }
+  .marker.lilac { color: var(--lilac); text-shadow: 0 0 22px color-mix(in srgb, var(--lilac) 45%, transparent); }
 
-  /* Sticker-like tag chip */
+  /* Sticker-like tag pill */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.28rem 0.7rem;
+    padding: 0.3rem 0.7rem;
     border-radius: var(--r-pill);
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
     line-height: 1;
+    background: var(--clay-2);
+    box-shadow: var(--clay-inset);
     border: 1px solid var(--hairline);
-    background: var(--surface);
   }
 
-  /* Large, dictation-friendly text surfaces */
+  /* Dictation-friendly text field (inset well) */
   .field {
     width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: var(--bg-2);
     border-radius: var(--r-md);
-    padding: 0.85rem 1rem;
-    font-size: 1rem;
-    color: var(--foreground);
+    box-shadow: var(--clay-press);
+    border: 1px solid var(--hairline);
+    padding: 0.8rem 1rem;
+    font-family: var(--font-body), monospace;
+    font-size: 0.98rem;
+    color: var(--ink);
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: box-shadow 0.15s ease;
   }
-
+  .field::placeholder { color: var(--muted-2); }
   .field:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+    box-shadow: var(--clay-press),
+      0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
   }
 }
 
-/* Respect reduced motion for all the springy pop */
+/* Gentle floating motion for the 3D accents */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-2deg); }
+}
+.float-soft { animation: float-soft 6s ease-in-out infinite; }
+.float-slow { animation: float-soft 9s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
@@ -207,5 +216,6 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--grape) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--ink);
 }

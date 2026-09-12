@@ -39,21 +39,21 @@ export default function TodayPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.4fr]">
         {/* Left rail */}
         <div className="flex flex-col gap-4">
-          <GlassCard accent="grape">
+          <GlassCard accent="lilac">
             <h2 className="mb-2 font-display font-semibold">✅ To-Do</h2>
             <p className="text-sm text-[color:var(--muted)]">
               Your checklist for the day lands here.
             </p>
           </GlassCard>
 
-          <GlassCard accent="candy">
+          <GlassCard accent="bubble">
             <h2 className="mb-2 font-display font-semibold">📸 Photo Wall</h2>
             <p className="text-sm text-[color:var(--muted)]">
               Add photos from your phone, each with an optional note.
             </p>
           </GlassCard>
 
-          <GlassCard accent="sunset">
+          <GlassCard accent="peach">
             <h2 className="mb-2 font-display font-semibold">⭐ Key Moments</h2>
             <p className="text-sm text-[color:var(--muted)]">
               Capture what mattered, tag it, find it later.
@@ -62,7 +62,7 @@ export default function TodayPage() {
         </div>
 
         {/* Center: journal */}
-        <GlassCard accent="grape" padding="lg" className="min-h-[22rem]">
+        <GlassCard accent="sky" padding="lg" className="min-h-[22rem]">
           <h2 className="mb-3 font-display text-lg font-semibold">
             📖 Journal of the day
           </h2>

@@ -4,7 +4,8 @@
  * validation stay consistent.
  */
 
-export const APP_NAME = "Daylog";
+export const APP_NAME = "LUMA";
+export const APP_TAGLINE = "your day's diary";
 
 /* ---------------- Key Moment tags (fixed set) ---------------- */
 

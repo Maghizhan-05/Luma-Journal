@@ -1,6 +1,6 @@
 import { type ButtonHTMLAttributes, forwardRef } from "react";
 
-type Variant = "primary" | "glass" | "ghost" | "danger";
+type Variant = "primary" | "clay" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  "inline-flex items-center justify-center gap-2 font-semibold rounded-[var(--r-pill)] transition-[transform,box-shadow,background] duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_srgb,var(--accent)_30%,transparent)] disabled:opacity-50 disabled:pointer-events-none select-none";
+  "inline-flex items-center justify-center gap-2 font-bold rounded-[var(--r-pill)] font-[family-name:var(--font-display)] tracking-tight transition-[transform,box-shadow,filter] duration-150 active:translate-y-[1px] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color-mix(in_srgb,var(--accent)_35%,transparent)] disabled:opacity-55 disabled:pointer-events-none select-none";
 
 const sizes: Record<Size, string> = {
   sm: "text-sm px-4 h-9",
@@ -17,15 +17,17 @@ const sizes: Record<Size, string> = {
   lg: "text-base px-6 h-13",
 };
 
+// Puffy clay buttons: colored fill + soft outer shadow + inner rim light.
 const variants: Record<Variant, string> = {
+  // Warm gold glow with dark ink — pops on near-black without shouting.
   primary:
-    "text-white shadow-[0_6px_20px_rgba(124,92,255,0.35)] [background-image:var(--grad-brand)] hover:brightness-[1.05]",
-  glass:
-    "glass glass-strong text-[color:var(--foreground)] hover:brightness-[1.03]",
+    "text-[#17130a] bg-[var(--accent)] [box-shadow:0_10px_30px_color-mix(in_srgb,var(--accent)_30%,transparent),inset_1px_1px_2px_rgba(255,255,255,0.4)] hover:brightness-[1.06] active:[box-shadow:var(--clay-press)]",
+  clay:
+    "clay text-[color:var(--ink)] hover:brightness-[1.15] active:[box-shadow:var(--clay-press)]",
   ghost:
-    "text-[color:var(--foreground)] hover:bg-[color-mix(in_srgb,var(--foreground)_8%,transparent)]",
+    "text-[color:var(--ink-soft)] hover:bg-[color-mix(in_srgb,var(--ink)_9%,transparent)]",
   danger:
-    "text-white [background-image:linear-gradient(135deg,#ff6b6b,#ff8a3d)] hover:brightness-[1.05]",
+    "text-[#1a0f0c] bg-[var(--danger)] [box-shadow:0_10px_30px_color-mix(in_srgb,var(--danger)_30%,transparent),inset_1px_1px_2px_rgba(255,255,255,0.35)] hover:brightness-[1.06]",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

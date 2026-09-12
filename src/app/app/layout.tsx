@@ -26,7 +26,7 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
         <Link
           href="/app/settings"
           aria-label="Settings"
-          className="grid h-9 w-9 place-items-center rounded-full bg-[color-mix(in_srgb,var(--grape)_16%,transparent)] text-base"
+          className="grid h-9 w-9 place-items-center rounded-full bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] text-base"
         >
           ⚙️
         </Link>

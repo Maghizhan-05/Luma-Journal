@@ -97,14 +97,14 @@ export function AuthForm({
         {mode === "login" ? (
           <>
             New here?{" "}
-            <Link href="/signup" className="font-semibold text-[color:var(--grape)]">
+            <Link href="/signup" className="font-semibold text-[color:var(--accent)]">
               Create an account
             </Link>
           </>
         ) : (
           <>
             Already have one?{" "}
-            <Link href="/login" className="font-semibold text-[color:var(--grape)]">
+            <Link href="/login" className="font-semibold text-[color:var(--accent)]">
               Log in
             </Link>
           </>

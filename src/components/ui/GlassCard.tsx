@@ -1,54 +1,59 @@
 import { type HTMLAttributes, forwardRef } from "react";
 
 type Accent =
-  | "grape"
-  | "candy"
-  | "sunset"
-  | "mint"
-  | "sky"
-  | "lemon"
+  | "peach"
   | "coral"
+  | "butter"
+  | "lemon"
+  | "sky"
+  | "mint"
+  | "lilac"
+  | "bubble"
   | "none";
 
-interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
+interface ClayCardProps extends HTMLAttributes<HTMLDivElement> {
   accent?: Accent;
   padding?: "sm" | "md" | "lg";
-  strong?: boolean;
+  /** Flatter surface (less puffed) for nested elements. */
+  flat?: boolean;
 }
 
 const accentVar: Record<Exclude<Accent, "none">, string> = {
-  grape: "var(--grape)",
-  candy: "var(--candy)",
-  sunset: "var(--sunset)",
-  mint: "var(--mint)",
-  sky: "var(--sky)",
-  lemon: "var(--lemon)",
+  peach: "var(--peach)",
   coral: "var(--coral)",
+  butter: "var(--butter)",
+  lemon: "var(--lemon)",
+  sky: "var(--sky)",
+  mint: "var(--mint)",
+  lilac: "var(--lilac)",
+  bubble: "var(--bubble)",
 };
 
-const pad = { sm: "p-3", md: "p-5", lg: "p-6 sm:p-7" };
+const pad = { sm: "p-4", md: "p-5", lg: "p-6 sm:p-7" };
 
 /**
- * Frosted-glass surface — the base building block for every card in the app.
- * `accent` adds a subtle colored glow so each section reads distinctly.
+ * Puffy clay surface — the base building block for every card in LUMA.
+ * `accent` warms the card with a soft colored wash + tinted contact shadow,
+ * so each section reads distinctly without loud gradients.
  */
-export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
-  function GlassCard(
-    { accent = "none", padding = "md", strong, className = "", style, ...rest },
+export const GlassCard = forwardRef<HTMLDivElement, ClayCardProps>(
+  function ClayCard(
+    { accent = "none", padding = "md", flat, className = "", style, ...rest },
     ref,
   ) {
-    const glow =
+    const accentStyle =
       accent !== "none"
         ? {
-            boxShadow: `var(--glass-shadow), 0 0 0 1px color-mix(in srgb, ${accentVar[accent]} 22%, transparent)`,
+            background: `color-mix(in srgb, ${accentVar[accent]} 12%, var(--clay))`,
+            boxShadow: `var(--clay-shadow), var(--clay-inset), 6px 8px 22px color-mix(in srgb, ${accentVar[accent]} 22%, transparent)`,
           }
         : undefined;
 
     return (
       <div
         ref={ref}
-        className={`glass ${strong ? "glass-strong" : ""} ${pad[padding]} ${className}`}
-        style={{ ...glow, ...style }}
+        className={`${flat ? "clay-flat" : "clay"} ${pad[padding]} ${className}`}
+        style={{ ...accentStyle, ...style }}
         {...rest}
       />
     );

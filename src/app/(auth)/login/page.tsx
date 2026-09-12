@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const next = typeof params.next === "string" ? params.next : undefined;
 
   return (
-    <GlassCard padding="lg" strong>
+    <GlassCard padding="lg">
       <PopHeading as="h1" className="mb-1 text-2xl">
         Welcome back 👋
       </PopHeading>

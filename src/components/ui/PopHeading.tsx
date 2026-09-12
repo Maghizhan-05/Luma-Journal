@@ -1,23 +1,20 @@
 import { type ElementType, type ReactNode } from "react";
 
-type Variant = "brand" | "sunset" | "ocean" | "lemon";
-
 interface PopHeadingProps {
   as?: ElementType;
-  variant?: Variant;
   className?: string;
   children: ReactNode;
 }
 
 /**
- * Playful gradient heading — the Gen-Z pop lives here while body stays minimal.
+ * Typewriter display heading. Character comes from the mono face + weight and
+ * from optional <span className="marker"> highlights inside the text — a
+ * crafted, human touch rather than an AI-default gradient.
  */
 export function PopHeading({
   as: Tag = "h2",
-  variant = "brand",
   className = "",
   children,
 }: PopHeadingProps) {
-  const v = variant === "brand" ? "" : variant;
-  return <Tag className={`pop-heading ${v} ${className}`}>{children}</Tag>;
+  return <Tag className={`type-heading ${className}`}>{children}</Tag>;
 }
