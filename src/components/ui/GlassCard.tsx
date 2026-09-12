@@ -1,6 +1,14 @@
 import { type HTMLAttributes, forwardRef } from "react";
 
-type Accent = "grape" | "candy" | "sunset" | "mint" | "sky" | "lemon" | "none";
+type Accent =
+  | "grape"
+  | "candy"
+  | "sunset"
+  | "mint"
+  | "sky"
+  | "lemon"
+  | "coral"
+  | "none";
 
 interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   accent?: Accent;
@@ -15,6 +23,7 @@ const accentVar: Record<Exclude<Accent, "none">, string> = {
   mint: "var(--mint)",
   sky: "var(--sky)",
   lemon: "var(--lemon)",
+  coral: "var(--coral)",
 };
 
 const pad = { sm: "p-3", md: "p-5", lg: "p-6 sm:p-7" };
