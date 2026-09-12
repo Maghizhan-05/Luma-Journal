@@ -38,6 +38,13 @@ export function shortWeekday(date: string): string {
   return WEEKDAYS[parseDate(date).getDay()].slice(0, 3);
 }
 
+/** Add n days to a YYYY-MM-DD string. */
+export function addDay(date: string, n: number): string {
+  const dt = parseDate(date);
+  dt.setDate(dt.getDate() + n);
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+}
+
 /** Current month as YYYY-MM in the given timezone. */
 export function currentMonth(tz: string | null | undefined): string {
   return todayInTz(tz).slice(0, 7);
