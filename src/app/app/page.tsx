@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
-import { format } from "date-fns";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { getDayData } from "@/lib/data/day";
+import { todayInTz, formatLong } from "@/lib/date";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { PopHeading } from "@/components/ui/PopHeading";
+import { JournalEditor } from "@/components/day/JournalEditor";
+import { TodoCard } from "@/components/day/TodoCard";
+import { KeyMomentsCard } from "@/components/day/KeyMomentsCard";
+import { PhotoWallCard } from "@/components/day/PhotoWallCard";
+import { CURRENCY_MAP, DEFAULT_CURRENCY } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Today" };
 
@@ -13,74 +21,67 @@ function greeting(h: number) {
   return "Winding down";
 }
 
-/**
- * Today (Current view) — mirrors the sketch's main screen:
- * left rail (To-Do, Photo Wall, Key Moments), center Journal, bottom Money.
- * Cards are wired to data in Phase 2+.
- */
-export default function TodayPage() {
-  const now = new Date();
-  const today = format(now, "EEEE, d MMMM yyyy");
+export default async function TodayPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("timezone, default_currency, display_name")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const tz = profile?.timezone ?? "UTC";
+  const currency = profile?.default_currency ?? DEFAULT_CURRENCY;
+  const sym = CURRENCY_MAP[currency]?.symbol ?? "₹";
+  const date = todayInTz(tz);
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", hour12: false }).format(new Date()),
+  );
+
+  const { entry, todos, moments, photos, transactions } = await getDayData(date);
+
+  const spent = transactions.filter((t) => t.direction === "spent").reduce((s, t) => s + Number(t.amount), 0);
+  const received = transactions.filter((t) => t.direction === "received").reduce((s, t) => s + Number(t.amount), 0);
+  const money = (n: number) => `${sym}${n.toLocaleString()}`;
 
   return (
     <div className="flex flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <PopHeading as="h1" className="text-3xl sm:text-4xl">
-            {greeting(now.getHours())} ✨
+            {greeting(hour)}{profile?.display_name ? `, ${profile.display_name}` : ""} ✦
           </PopHeading>
-          <p className="mt-1 text-sm text-[color:var(--muted)]">{today}</p>
+          <p className="mt-1 text-sm text-[color:var(--muted)]">{formatLong(date)}</p>
         </div>
-        <span className="chip" style={{ color: "var(--lemon)" }}>
-          🔥 Streak starts today
-        </span>
       </header>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.4fr]">
         {/* Left rail */}
         <div className="flex flex-col gap-4">
-          <GlassCard accent="lilac">
-            <h2 className="mb-2 font-display font-semibold">✅ To-Do</h2>
-            <p className="text-sm text-[color:var(--muted)]">
-              Your checklist for the day lands here.
-            </p>
-          </GlassCard>
-
-          <GlassCard accent="bubble">
-            <h2 className="mb-2 font-display font-semibold">📸 Photo Wall</h2>
-            <p className="text-sm text-[color:var(--muted)]">
-              Add photos from your phone, each with an optional note.
-            </p>
-          </GlassCard>
-
-          <GlassCard accent="peach">
-            <h2 className="mb-2 font-display font-semibold">⭐ Key Moments</h2>
-            <p className="text-sm text-[color:var(--muted)]">
-              Capture what mattered, tag it, find it later.
-            </p>
-          </GlassCard>
+          <GlassCard accent="lilac"><TodoCard date={date} todos={todos} /></GlassCard>
+          <GlassCard accent="bubble"><PhotoWallCard date={date} userId={user.id} photos={photos} /></GlassCard>
+          <GlassCard accent="peach"><KeyMomentsCard date={date} moments={moments} /></GlassCard>
         </div>
 
         {/* Center: journal */}
-        <GlassCard accent="sky" padding="lg" className="min-h-[22rem]">
-          <h2 className="mb-3 font-display text-lg font-semibold">
-            📖 Journal of the day
-          </h2>
-          <p className="text-sm text-[color:var(--muted)]">
-            The big writing space — dictation-friendly — goes here in Phase 2.
-          </p>
+        <GlassCard accent="sky" padding="lg" className="lg:sticky lg:top-24 lg:self-start">
+          <JournalEditor date={date} initialBody={entry?.body ?? ""} initialMood={entry?.mood ?? null} />
         </GlassCard>
       </div>
 
       {/* Bottom: money */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <GlassCard accent="coral">
-          <h2 className="mb-1 font-display font-semibold">💸 Money spent</h2>
-          <p className="text-2xl font-bold text-[color:var(--coral)]">—</p>
+          <h2 className="mb-1 type-heading">💸 Money spent</h2>
+          <p className="type-heading text-2xl" style={{ color: "var(--coral)" }}>{money(spent)}</p>
         </GlassCard>
         <GlassCard accent="mint">
-          <h2 className="mb-1 font-display font-semibold">💰 Money received</h2>
-          <p className="text-2xl font-bold text-[color:var(--mint)]">—</p>
+          <h2 className="mb-1 type-heading">💰 Money received</h2>
+          <p className="type-heading text-2xl" style={{ color: "var(--mint)" }}>{money(received)}</p>
         </GlassCard>
       </div>
     </div>
