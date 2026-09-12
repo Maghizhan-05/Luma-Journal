@@ -213,6 +213,10 @@ body {
   z-index: 0;
 }
 
+/* Blinking typewriter caret */
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.caret { animation: blink 1s step-end infinite; color: var(--accent); }
+
 /* Soft top/bottom text-fade mask for long sections */
 .edge-fade {
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);

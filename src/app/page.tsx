@@ -3,6 +3,11 @@ import { PopHeading } from "@/components/ui/PopHeading";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { PhotoWallDemo } from "@/components/landing/PhotoWallDemo";
+import { KeyMomentsDemo } from "@/components/landing/KeyMomentsDemo";
+import { MoneyTrackerDemo } from "@/components/landing/MoneyTrackerDemo";
+import { EveryViewDemo } from "@/components/landing/EveryViewDemo";
+import { StreaksDemo } from "@/components/landing/StreaksDemo";
+import { HeroWatermark } from "@/components/landing/HeroWatermark";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 
 const features = [
@@ -32,9 +37,11 @@ export default function Landing() {
 
       {/* Hero — text-forward, subtle drifting glow behind */}
       <section className="relative mx-auto max-w-3xl px-5 pt-24 pb-28 text-center sm:pt-32">
+        <HeroWatermark />
         <div className="glow-orb left-[15%] top-[8%] h-72 w-72" style={{ background: "radial-gradient(circle, rgba(230,181,102,0.22), transparent 70%)" }} />
         <div className="glow-orb right-[12%] top-[30%] h-64 w-64" style={{ background: "radial-gradient(circle, rgba(169,155,207,0.18), transparent 70%)", animationDelay: "-6s" }} />
 
+        <div className="relative z-10">
         <Reveal>
           <p className="mb-6 text-xs font-bold uppercase tracking-[0.32em] text-[color:var(--muted)]">
             A diary you&apos;ll actually keep
@@ -63,9 +70,10 @@ export default function Landing() {
             free to start · works beautifully on your phone
           </p>
         </Reveal>
+        </div>
       </section>
 
-      {/* Features — stacked full-width rows, each revealing on scroll */}
+      {/* Features — stacked full-width rows, each with a bespoke scroll animation */}
       <section className="relative z-10 mx-auto max-w-3xl px-5 pb-24">
         <div className="flex flex-col gap-5">
           {features.map((f, i) => (
@@ -90,6 +98,10 @@ export default function Landing() {
                   </div>
                 </div>
                 {f.no === "01" && <PhotoWallDemo />}
+                {f.no === "02" && <KeyMomentsDemo />}
+                {f.no === "03" && <MoneyTrackerDemo />}
+                {f.no === "04" && <EveryViewDemo />}
+                {f.no === "05" && <StreaksDemo />}
               </div>
             </Reveal>
           ))}
