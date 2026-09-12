@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PopHeading } from "@/components/ui/PopHeading";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { PhotoWallDemo } from "@/components/landing/PhotoWallDemo";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 
 const features = [
@@ -70,22 +71,25 @@ export default function Landing() {
           {features.map((f, i) => (
             <Reveal key={f.no} delay={i * 0.03}>
               <div
-                className="clay flex items-start gap-5 p-6 sm:p-8"
+                className="clay p-6 sm:p-8"
                 style={{ boxShadow: `var(--clay-shadow), var(--clay-inset), 0 0 60px -30px ${f.accent}` }}
               >
-                <div
-                  className="grid h-14 w-14 shrink-0 place-items-center rounded-[var(--r-md)] text-2xl"
-                  style={{ background: `color-mix(in srgb, ${f.accent} 16%, var(--surface))`, boxShadow: "var(--clay-inset)" }}
-                >
-                  {f.emoji}
-                </div>
-                <div className="min-w-0">
-                  <div className="mb-1 flex items-center gap-3">
-                    <span className="text-xs font-bold tracking-widest text-[color:var(--muted-2)]">{f.no}</span>
-                    <h3 className="type-heading text-xl" style={{ color: f.accent }}>{f.title}</h3>
+                <div className="flex items-start gap-5">
+                  <div
+                    className="grid h-14 w-14 shrink-0 place-items-center rounded-[var(--r-md)] text-2xl"
+                    style={{ background: `color-mix(in srgb, ${f.accent} 16%, var(--surface))`, boxShadow: "var(--clay-inset)" }}
+                  >
+                    {f.emoji}
                   </div>
-                  <p className="text-[color:var(--ink-soft)]">{f.copy}</p>
+                  <div className="min-w-0">
+                    <div className="mb-1 flex items-center gap-3">
+                      <span className="text-xs font-bold tracking-widest text-[color:var(--muted-2)]">{f.no}</span>
+                      <h3 className="type-heading text-xl" style={{ color: f.accent }}>{f.title}</h3>
+                    </div>
+                    <p className="text-[color:var(--ink-soft)]">{f.copy}</p>
+                  </div>
                 </div>
+                {f.no === "01" && <PhotoWallDemo />}
               </div>
             </Reveal>
           ))}
