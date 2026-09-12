@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getDayData } from "@/lib/data/day";
 import { todayInTz, formatLong } from "@/lib/date";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { PopHeading } from "@/components/ui/PopHeading";
+import { DayBoard, type BoardItem } from "@/components/day/DayBoard";
 import { JournalEditor } from "@/components/day/JournalEditor";
 import { TodoCard } from "@/components/day/TodoCard";
 import { KeyMomentsCard } from "@/components/day/KeyMomentsCard";
@@ -48,6 +48,38 @@ export default async function TodayPage() {
   const received = transactions.filter((t) => t.direction === "received").reduce((s, t) => s + Number(t.amount), 0);
   const money = (n: number) => `${sym}${n.toLocaleString()}`;
 
+  const items: BoardItem[] = [
+    {
+      id: "journal",
+      accent: "sky",
+      wide: true,
+      content: <JournalEditor date={date} initialBody={entry?.body ?? ""} initialMood={entry?.mood ?? null} />,
+    },
+    { id: "todo", accent: "lilac", content: <TodoCard date={date} todos={todos} /> },
+    { id: "moments", accent: "peach", content: <KeyMomentsCard date={date} moments={moments} /> },
+    { id: "photos", accent: "bubble", content: <PhotoWallCard date={date} userId={user.id} photos={photos} /> },
+    {
+      id: "spent",
+      accent: "coral",
+      content: (
+        <div>
+          <h2 className="mb-1 type-heading">💸 Money spent</h2>
+          <p className="type-heading text-2xl" style={{ color: "var(--coral)" }}>{money(spent)}</p>
+        </div>
+      ),
+    },
+    {
+      id: "received",
+      accent: "mint",
+      content: (
+        <div>
+          <h2 className="mb-1 type-heading">💰 Money received</h2>
+          <p className="type-heading text-2xl" style={{ color: "var(--mint)" }}>{money(received)}</p>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-4">
       <header className="flex flex-wrap items-end justify-between gap-2">
@@ -57,33 +89,10 @@ export default async function TodayPage() {
           </PopHeading>
           <p className="mt-1 text-sm text-[color:var(--muted)]">{formatLong(date)}</p>
         </div>
+        <p className="text-xs text-[color:var(--muted-2)]">drag ⠿ to rearrange</p>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.4fr]">
-        {/* Left rail */}
-        <div className="flex flex-col gap-4">
-          <GlassCard accent="lilac"><TodoCard date={date} todos={todos} /></GlassCard>
-          <GlassCard accent="bubble"><PhotoWallCard date={date} userId={user.id} photos={photos} /></GlassCard>
-          <GlassCard accent="peach"><KeyMomentsCard date={date} moments={moments} /></GlassCard>
-        </div>
-
-        {/* Center: journal */}
-        <GlassCard accent="sky" padding="lg" className="lg:sticky lg:top-24 lg:self-start">
-          <JournalEditor date={date} initialBody={entry?.body ?? ""} initialMood={entry?.mood ?? null} />
-        </GlassCard>
-      </div>
-
-      {/* Bottom: money */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <GlassCard accent="coral">
-          <h2 className="mb-1 type-heading">💸 Money spent</h2>
-          <p className="type-heading text-2xl" style={{ color: "var(--coral)" }}>{money(spent)}</p>
-        </GlassCard>
-        <GlassCard accent="mint">
-          <h2 className="mb-1 type-heading">💰 Money received</h2>
-          <p className="type-heading text-2xl" style={{ color: "var(--mint)" }}>{money(received)}</p>
-        </GlassCard>
-      </div>
+      <DayBoard items={items} />
     </div>
   );
 }

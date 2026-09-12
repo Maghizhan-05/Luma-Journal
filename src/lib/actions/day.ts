@@ -116,7 +116,6 @@ export async function deleteMoment(id: string): Promise<Result> {
 const photoSchema = z.object({
   date: dateSchema,
   storage_path: z.string().min(1),
-  alt_text: z.string().trim().min(1).max(300),
   caption: z.string().trim().max(500).optional(),
   width: z.number().int().positive().optional(),
   height: z.number().int().positive().optional(),
@@ -126,14 +125,13 @@ const photoSchema = z.object({
 export async function addPhoto(input: {
   date: string;
   storage_path: string;
-  alt_text: string;
   caption?: string;
   width?: number;
   height?: number;
   size_bytes?: number;
 }): Promise<Result> {
   const parsed = photoSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Alt text is required." };
+  if (!parsed.success) return { ok: false, error: "Could not save photo." };
   const { supabase, user } = await userOrThrow();
   const p = parsed.data;
 
@@ -142,11 +140,16 @@ export async function addPhoto(input: {
     return { ok: false, error: "Invalid storage path." };
   }
 
+  // Personal photos don't require the user to write alt text; use their
+  // caption when present, else a neutral default (the column is NOT NULL and
+  // it still gives screen readers something reasonable).
+  const alt = p.caption?.trim() || "Photo from this day";
+
   const { error } = await supabase.from("photos").insert({
     user_id: user.id,
     entry_date: p.date,
     storage_path: p.storage_path,
-    alt_text: p.alt_text,
+    alt_text: alt,
     caption: p.caption || null,
     width: p.width ?? null,
     height: p.height ?? null,

@@ -18,7 +18,6 @@ export function PhotoWallCard({
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [alt, setAlt] = useState("");
   const [caption, setCaption] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +34,6 @@ export function PhotoWallCard({
     setFile(null);
     if (preview) URL.revokeObjectURL(preview);
     setPreview(null);
-    setAlt("");
     setCaption("");
     if (fileRef.current) fileRef.current.value = "";
   }
@@ -43,10 +41,6 @@ export function PhotoWallCard({
   async function upload(e: React.FormEvent) {
     e.preventDefault();
     if (!file) return;
-    if (!alt.trim()) {
-      setError("Please add alt text (helps accessibility).");
-      return;
-    }
     setBusy(true);
     setError(null);
     try {
@@ -77,7 +71,6 @@ export function PhotoWallCard({
       const res = await addPhoto({
         date,
         storage_path: path,
-        alt_text: alt.trim(),
         caption: caption.trim() || undefined,
         width,
         height,
@@ -125,15 +118,9 @@ export function PhotoWallCard({
             <img src={preview} alt="Selected preview" className="max-h-48 w-full rounded-[var(--r-sm)] object-cover" />
           )}
           <input
-            value={alt}
-            onChange={(e) => setAlt(e.target.value)}
-            placeholder="Alt text (describe the photo) — required"
-            className="field py-2 text-sm"
-          />
-          <input
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            placeholder="A note about this moment (optional)"
+            placeholder="Write about this photo or moment (optional)"
             className="field py-2 text-sm"
           />
           {error && <p className="text-sm text-[color:var(--coral)]">{error}</p>}
