@@ -7,6 +7,7 @@ import { formatLong } from "@/lib/date";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { PopHeading } from "@/components/ui/PopHeading";
 import { SearchControls } from "@/components/moments/SearchControls";
+import { ShareMomentButton } from "@/components/share/ShareMomentButton";
 import { TAG_MAP, TAGS, type TagKey } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Key Moments" };
@@ -40,23 +41,28 @@ export default async function MomentsPage({ searchParams }: PageProps<"/app/mome
 
       <div className="flex flex-col gap-2.5">
         {results.map((m) => (
-          <Link key={m.id} href={`/app/day/${m.entry_date}`}>
-            <GlassCard className="transition hover:brightness-110">
-              <div className="flex items-start justify-between gap-3">
+          <GlassCard key={m.id}>
+            <div className="flex items-start justify-between gap-3">
+              <Link href={`/app/day/${m.entry_date}`} className="min-w-0 flex-1 transition hover:opacity-80">
                 <p className="font-bold text-[color:var(--ink)]">{m.title}</p>
-                <span className="shrink-0 text-xs text-[color:var(--muted-2)]">{formatLong(m.entry_date).replace(/,.*/, "")}</span>
+              </Link>
+              <div className="flex shrink-0 items-center gap-2">
+                <ShareMomentButton title={m.title} description={m.description} date={m.entry_date} tags={m.tags} />
+                <span className="text-xs text-[color:var(--muted-2)]">{formatLong(m.entry_date).replace(/,.*/, "")}</span>
               </div>
-              {m.description && <p className="mt-0.5 text-sm text-[color:var(--muted)]">{m.description}</p>}
-              {m.tags.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {m.tags.map((k) => {
-                    const t = TAG_MAP[k as TagKey];
-                    return t ? <span key={k} className="chip text-xs" style={{ color: t.color }}>{t.emoji} {t.label}</span> : null;
-                  })}
-                </div>
-              )}
-            </GlassCard>
-          </Link>
+            </div>
+            {m.description && (
+              <Link href={`/app/day/${m.entry_date}`} className="mt-0.5 block text-sm text-[color:var(--muted)] transition hover:opacity-80">{m.description}</Link>
+            )}
+            {m.tags.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {m.tags.map((k) => {
+                  const t = TAG_MAP[k as TagKey];
+                  return t ? <span key={k} className="chip text-xs" style={{ color: t.color }}>{t.emoji} {t.label}</span> : null;
+                })}
+              </div>
+            )}
+          </GlassCard>
         ))}
         {results.length === 0 && (
           <p className="py-8 text-center text-sm text-[color:var(--muted-2)]">No moments match — try fewer filters.</p>

@@ -213,6 +213,13 @@ body {
   z-index: 0;
 }
 
+/* Shake for wrong PIN */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-7px); }
+  40%, 80% { transform: translateX(7px); }
+}
+
 /* Blinking typewriter caret */
 @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .caret { animation: blink 1s step-end infinite; color: var(--accent); }

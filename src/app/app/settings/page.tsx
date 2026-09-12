@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { PopHeading } from "@/components/ui/PopHeading";
 import { SettingsForm } from "@/components/settings/SettingsForm";
+import { PinLock } from "@/components/settings/PinLock";
 import { SignOutButton } from "@/components/app/SignOutButton";
 import { Avatar } from "@/components/ui/Avatar";
 import { DEFAULT_CURRENCY } from "@/lib/constants";
@@ -48,6 +49,10 @@ export default async function SettingsPage() {
             reminders_weekly: profile?.reminders_weekly ?? true,
           }}
         />
+      </GlassCard>
+
+      <GlassCard accent="sky" padding="lg">
+        <PinLock />
       </GlassCard>
 
       <GlassCard accent="mint">

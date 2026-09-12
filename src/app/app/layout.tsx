@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AppNav } from "@/components/app/AppNav";
+import { DayLock } from "@/components/app/DayLock";
 import { Avatar } from "@/components/ui/Avatar";
 
 export default async function AppLayout({ children }: LayoutProps<"/app">) {
@@ -24,6 +25,7 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
     .maybeSingle();
 
   return (
+    <DayLock>
     <div className="flex min-h-dvh flex-col">
       <AppNav>
         <Link href="/app/settings" aria-label="Your profile" className="transition hover:brightness-110">
@@ -35,5 +37,6 @@ export default async function AppLayout({ children }: LayoutProps<"/app">) {
         {children}
       </main>
     </div>
+    </DayLock>
   );
 }

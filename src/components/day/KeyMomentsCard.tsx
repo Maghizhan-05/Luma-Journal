@@ -3,6 +3,7 @@
 import { useOptimistic, useState, useTransition } from "react";
 import { addMoment, deleteMoment } from "@/lib/actions/day";
 import { TAGS, TAG_MAP, type TagKey } from "@/lib/constants";
+import { ShareMomentButton } from "@/components/share/ShareMomentButton";
 import type { KeyMoment } from "@/lib/types";
 
 type Optimistic = { kind: "add"; m: KeyMoment } | { kind: "delete"; id: string };
@@ -106,14 +107,17 @@ export function KeyMomentsCard({ date, moments }: { date: string; moments: KeyMo
           <li key={m.id} className="group rounded-[var(--r-md)] p-3" style={{ boxShadow: "var(--clay-inset)", background: "var(--surface)" }}>
             <div className="flex items-start justify-between gap-2">
               <p className="font-bold text-[color:var(--ink)]">{m.title}</p>
-              <button
-                type="button"
-                onClick={() => startTransition(async () => { applyOptimistic({ kind: "delete", id: m.id }); await deleteMoment(m.id); })}
-                aria-label="Delete moment"
-                className="shrink-0 text-[color:var(--muted-2)] opacity-0 transition hover:text-[color:var(--coral)] group-hover:opacity-100"
-              >
-                ✕
-              </button>
+              <div className="flex shrink-0 items-center gap-2 opacity-0 transition group-hover:opacity-100">
+                <ShareMomentButton title={m.title} description={m.description} date={m.entry_date} tags={m.tags} />
+                <button
+                  type="button"
+                  onClick={() => startTransition(async () => { applyOptimistic({ kind: "delete", id: m.id }); await deleteMoment(m.id); })}
+                  aria-label="Delete moment"
+                  className="text-[color:var(--muted-2)] transition hover:text-[color:var(--coral)]"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
             {m.description && <p className="mt-0.5 text-sm text-[color:var(--muted)]">{m.description}</p>}
             {m.tags.length > 0 && (
