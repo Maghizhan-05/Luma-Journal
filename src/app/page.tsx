@@ -2,7 +2,7 @@ import Link from "next/link";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { PopHeading } from "@/components/ui/PopHeading";
 import { Button } from "@/components/ui/Button";
-import { SplineHero } from "@/components/landing/SplineHero";
+import { HeroCanvas } from "@/components/landing/HeroCanvas";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 
 const features = [
@@ -63,7 +63,7 @@ export default function Landing() {
 
         {/* 3D hero */}
         <div className="order-1 flex justify-center md:order-2">
-          <SplineHero />
+          <HeroCanvas />
         </div>
       </section>
 
