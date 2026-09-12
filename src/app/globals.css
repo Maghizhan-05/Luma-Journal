@@ -1,26 +1,211 @@
 @import "tailwindcss";
 
+/*
+  Journal App — Design System
+  Apple glassmorphism (structure) × Gen-Z pop (color, motion, headings)
+  Theming: light by default; `.dark` on <html> overrides. Tokens live on :root.
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Canvas + surfaces */
+  --bg: #f6f5fb;
+  --bg-tint-1: #fbe9f5; /* soft candy wash */
+  --bg-tint-2: #e6f0ff; /* soft sky wash */
+  --bg-tint-3: #e9fbf1; /* soft mint wash */
+  --surface: #ffffff;
+  --foreground: #1a1725;
+  --muted: #6b6780;
+  --muted-2: #8f8aa3;
+  --border: rgba(26, 23, 37, 0.08);
+  --hairline: rgba(26, 23, 37, 0.06);
+
+  /* Glass */
+  --glass-fill: rgba(255, 255, 255, 0.55);
+  --glass-fill-strong: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px rgba(31, 20, 66, 0.10);
+  --glass-blur: 20px;
+
+  /* Gen-Z pop accents (each section gets one) */
+  --grape: #7c5cff;   /* Journal / brand */
+  --candy: #ff5db1;   /* Photo Wall */
+  --sunset: #ff8a3d;  /* Key Moments */
+  --mint: #22c8a6;    /* Finance / income */
+  --sky: #3d9bff;     /* Calendar / views */
+  --lemon: #ffcb45;   /* Streaks / highlights */
+  --coral: #ff6b6b;   /* Spend / alerts */
+
+  /* Semantic */
+  --accent: var(--grape);
+  --success: var(--mint);
+  --danger: var(--coral);
+
+  /* Gradients (playful headings + buttons) */
+  --grad-brand: linear-gradient(135deg, #7c5cff 0%, #ff5db1 100%);
+  --grad-sunset: linear-gradient(135deg, #ff8a3d 0%, #ff5db1 100%);
+  --grad-ocean: linear-gradient(135deg, #3d9bff 0%, #22c8a6 100%);
+  --grad-lemon: linear-gradient(135deg, #ffcb45 0%, #ff8a3d 100%);
+
+  /* Radii + spacing rhythm (iOS card geometry) */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0c0a14;
+  --bg-tint-1: #17101c;
+  --bg-tint-2: #0f1524;
+  --bg-tint-3: #0c1a17;
+  --surface: #16131f;
+  --foreground: #f2effa;
+  --muted: #a7a1bd;
+  --muted-2: #7c7794;
+  --border: rgba(255, 255, 255, 0.10);
+  --hairline: rgba(255, 255, 255, 0.07);
+
+  --glass-fill: rgba(30, 26, 44, 0.55);
+  --glass-fill-strong: rgba(30, 26, 44, 0.74);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-border: var(--border);
+
+  --color-grape: var(--grape);
+  --color-candy: var(--candy);
+  --color-sunset: var(--sunset);
+  --color-mint: var(--mint);
+  --color-sky: var(--sky);
+  --color-lemon: var(--lemon);
+  --color-coral: var(--coral);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-pill: var(--r-pill);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-display), var(--font-geist-sans), ui-rounded,
+    system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
+  min-height: 100dvh;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  /* Soft aurora wash behind the frosted glass */
+  background-image:
+    radial-gradient(60rem 60rem at 8% -10%, var(--bg-tint-1), transparent 55%),
+    radial-gradient(50rem 50rem at 100% 0%, var(--bg-tint-2), transparent 50%),
+    radial-gradient(55rem 55rem at 50% 120%, var(--bg-tint-3), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Reusable primitives ---------- */
+
+@layer components {
+  .glass {
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--r-lg);
+  }
+
+  .glass-strong {
+    background: var(--glass-fill-strong);
+  }
+
+  /* Playful gradient heading text */
+  .pop-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: var(--grad-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .pop-heading.sunset { background-image: var(--grad-sunset); -webkit-background-clip: text; background-clip: text; }
+  .pop-heading.ocean  { background-image: var(--grad-ocean);  -webkit-background-clip: text; background-clip: text; }
+  .pop-heading.lemon  { background-image: var(--grad-lemon);  -webkit-background-clip: text; background-clip: text; }
+
+  /* Sticker-like tag chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: var(--r-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+  }
+
+  /* Large, dictation-friendly text surfaces */
+  .field {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    color: var(--foreground);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+}
+
+/* Respect reduced motion for all the springy pop */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--grape) 30%, transparent);
 }
