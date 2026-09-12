@@ -1,13 +1,29 @@
 /** Date helpers. All journal data is keyed by a local calendar date (YYYY-MM-DD). */
 
-/** Today's calendar date in the given IANA timezone, as YYYY-MM-DD. */
-export function todayInTz(tz: string | null | undefined): string {
+/** A given instant's calendar date in an IANA timezone, as YYYY-MM-DD. */
+export function dateInTz(d: Date, tz: string | null | undefined): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: tz || "UTC",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date());
+  }).format(d);
+}
+
+/** Today's calendar date in the given IANA timezone, as YYYY-MM-DD. */
+export function todayInTz(tz: string | null | undefined): string {
+  return dateInTz(new Date(), tz);
+}
+
+/** Hour (0-23) of an instant in a timezone. */
+export function hourInTz(d: Date, tz: string | null | undefined): number {
+  return Number(new Intl.DateTimeFormat("en-US", { timeZone: tz || "UTC", hour: "numeric", hour12: false }).format(d)) % 24;
+}
+
+/** Weekday (0=Sun..6=Sat) of an instant in a timezone. */
+export function weekdayInTz(d: Date, tz: string | null | undefined): number {
+  const wd = new Intl.DateTimeFormat("en-US", { timeZone: tz || "UTC", weekday: "short" }).format(d);
+  return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(wd);
 }
 
 /** True if the YYYY-MM-DD string is today in the given timezone. */
