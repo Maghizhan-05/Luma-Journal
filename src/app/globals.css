@@ -199,13 +199,25 @@ body {
   }
 }
 
-/* Gentle floating motion for the 3D accents */
-@keyframes float-soft {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(-2deg); }
+/* Subtle drifting background glow (soft light on black, no hard shapes) */
+@keyframes glow-drift {
+  0%, 100% { transform: translate3d(-3%, -2%, 0) scale(1); opacity: 0.55; }
+  50% { transform: translate3d(3%, 3%, 0) scale(1.12); opacity: 0.9; }
 }
-.float-soft { animation: float-soft 6s ease-in-out infinite; }
-.float-slow { animation: float-soft 9s ease-in-out infinite; }
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  animation: glow-drift 16s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Soft top/bottom text-fade mask for long sections */
+.edge-fade {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
