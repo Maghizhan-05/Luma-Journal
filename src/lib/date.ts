@@ -37,3 +37,34 @@ export function formatLong(date: string): string {
 export function shortWeekday(date: string): string {
   return WEEKDAYS[parseDate(date).getDay()].slice(0, 3);
 }
+
+/** Current month as YYYY-MM in the given timezone. */
+export function currentMonth(tz: string | null | undefined): string {
+  return todayInTz(tz).slice(0, 7);
+}
+
+/** Add n months to a YYYY-MM string. */
+export function addMonth(month: string, n: number): string {
+  const [y, m] = month.split("-").map(Number);
+  const dt = new Date(y, m - 1 + n, 1);
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}`;
+}
+
+/** First and last calendar dates (YYYY-MM-DD) of a YYYY-MM month. */
+export function monthRange(month: string): { start: string; end: string } {
+  const [y, m] = month.split("-").map(Number);
+  const last = new Date(y, m, 0).getDate();
+  return { start: `${month}-01`, end: `${month}-${String(last).padStart(2, "0")}` };
+}
+
+/** "October 2026" */
+export function monthLabel(month: string): string {
+  const [y, m] = month.split("-").map(Number);
+  return `${MONTHS[m - 1]} ${y}`;
+}
+
+/** "Tue 14" short day label for a date. */
+export function dayLabel(date: string): string {
+  const dt = parseDate(date);
+  return `${WEEKDAYS[dt.getDay()].slice(0, 3)} ${dt.getDate()}`;
+}

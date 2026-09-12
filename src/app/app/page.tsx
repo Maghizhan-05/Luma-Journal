@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getDayData } from "@/lib/data/day";
@@ -63,7 +64,10 @@ export default async function TodayPage() {
       accent: "coral",
       content: (
         <div>
-          <h2 className="mb-1 type-heading">💸 Money spent</h2>
+          <div className="mb-1 flex items-center justify-between">
+            <h2 className="type-heading">💸 Money spent</h2>
+            <Link href="/app/finance" className="text-xs font-bold" style={{ color: "var(--coral)" }}>log →</Link>
+          </div>
           <p className="type-heading text-2xl" style={{ color: "var(--coral)" }}>{money(spent)}</p>
         </div>
       ),
@@ -73,7 +77,10 @@ export default async function TodayPage() {
       accent: "mint",
       content: (
         <div>
-          <h2 className="mb-1 type-heading">💰 Money received</h2>
+          <div className="mb-1 flex items-center justify-between">
+            <h2 className="type-heading">💰 Money received</h2>
+            <Link href="/app/finance" className="text-xs font-bold" style={{ color: "var(--mint)" }}>log →</Link>
+          </div>
           <p className="type-heading text-2xl" style={{ color: "var(--mint)" }}>{money(received)}</p>
         </div>
       ),
