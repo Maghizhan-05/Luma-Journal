@@ -22,12 +22,33 @@ export function PhotoWallCard({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function pick(e: React.ChangeEvent<HTMLInputElement>) {
+  function isHeic(f: File) {
+    return /heic|heif/i.test(f.type) || /\.(heic|heif)$/i.test(f.name);
+  }
+
+  async function pick(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    setFile(f);
-    setPreview(URL.createObjectURL(f));
     setError(null);
+    let usable = f;
+    // iPhone gallery photos are HEIC — browsers can't preview/encode them, so
+    // convert to JPEG first.
+    if (isHeic(f)) {
+      setBusy(true);
+      try {
+        const heic2any = (await import("heic2any")).default;
+        const out = await heic2any({ blob: f, toType: "image/jpeg", quality: 0.92 });
+        const blob = Array.isArray(out) ? out[0] : out;
+        usable = new File([blob], f.name.replace(/\.(heic|heif)$/i, ".jpg"), { type: "image/jpeg" });
+      } catch {
+        setError("Couldn't read this photo. Try choosing a JPEG or PNG.");
+        setBusy(false);
+        return;
+      }
+      setBusy(false);
+    }
+    setFile(usable);
+    setPreview(URL.createObjectURL(usable));
   }
 
   function reset() {
@@ -44,12 +65,22 @@ export function PhotoWallCard({
     setBusy(true);
     setError(null);
     try {
-      const compressed = await imageCompression(file, {
-        maxWidthOrHeight: 1600,
-        maxSizeMB: 0.5,
-        fileType: "image/webp",
-        useWebWorker: true,
-      });
+      // Try WebP, fall back to the browser's default (usually JPEG), then to
+      // the original file — so a broad range of phones/browsers work.
+      let compressed: Blob = file;
+      try {
+        compressed = await imageCompression(file, { maxWidthOrHeight: 1600, maxSizeMB: 0.5, fileType: "image/webp", useWebWorker: true });
+      } catch {
+        try {
+          compressed = await imageCompression(file, { maxWidthOrHeight: 1600, maxSizeMB: 0.5, useWebWorker: true });
+        } catch {
+          compressed = file;
+        }
+      }
+
+      const type = compressed.type || file.type || "image/jpeg";
+      const ext = type.includes("webp") ? "webp" : type.includes("png") ? "png" : "jpg";
+
       let width: number | undefined;
       let height: number | undefined;
       try {
@@ -62,10 +93,10 @@ export function PhotoWallCard({
       }
 
       const supabase = createClient();
-      const path = `${userId}/${date}/${crypto.randomUUID()}.webp`;
+      const path = `${userId}/${date}/${crypto.randomUUID()}.${ext}`;
       const { error: upErr } = await supabase.storage
         .from("photos")
-        .upload(path, compressed, { contentType: "image/webp" });
+        .upload(path, compressed, { contentType: type });
       if (upErr) throw new Error(upErr.message);
 
       const res = await addPhoto({
