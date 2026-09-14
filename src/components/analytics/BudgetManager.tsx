@@ -56,7 +56,7 @@ export function BudgetManager({
                     type="button"
                     onClick={() => startTransition(async () => { await deleteBudget(b.category); })}
                     aria-label="Remove budget"
-                    className="text-[color:var(--muted-2)] opacity-0 transition hover:text-[color:var(--coral)] group-hover:opacity-100"
+                    className="text-[color:var(--muted-2)] transition hover:text-[color:var(--coral)]"
                   >✕</button>
                 </span>
               </div>

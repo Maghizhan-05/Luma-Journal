@@ -88,7 +88,7 @@ export function TodoCard({ date, todos }: { date: string; todos: Todo[] }) {
                 })
               }
               aria-label="Delete todo"
-              className="text-[color:var(--muted-2)] opacity-0 transition hover:text-[color:var(--coral)] group-hover:opacity-100"
+              className="text-[color:var(--muted-2)] transition hover:text-[color:var(--coral)]"
             >
               ✕
             </button>

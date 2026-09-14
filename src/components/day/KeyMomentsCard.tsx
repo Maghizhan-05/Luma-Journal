@@ -107,7 +107,7 @@ export function KeyMomentsCard({ date, moments }: { date: string; moments: KeyMo
           <li key={m.id} className="group rounded-[var(--r-md)] p-3" style={{ boxShadow: "var(--clay-inset)", background: "var(--surface)" }}>
             <div className="flex items-start justify-between gap-2">
               <p className="font-bold text-[color:var(--ink)]">{m.title}</p>
-              <div className="flex shrink-0 items-center gap-2 opacity-0 transition group-hover:opacity-100">
+              <div className="flex shrink-0 items-center gap-2">
                 <ShareMomentButton title={m.title} description={m.description} date={m.entry_date} tags={m.tags} />
                 <button
                   type="button"

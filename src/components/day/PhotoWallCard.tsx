@@ -105,7 +105,6 @@ export function PhotoWallCard({
         ref={fileRef}
         type="file"
         accept="image/*"
-        capture="environment"
         onChange={pick}
         className="hidden"
       />
@@ -150,7 +149,7 @@ export function PhotoWallCard({
                 type="button"
                 onClick={() => deletePhoto(p.id, p.storage_path)}
                 aria-label="Delete photo"
-                className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full text-xs opacity-0 transition group-hover:opacity-100"
+                className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full text-xs"
                 style={{ background: "rgba(0,0,0,0.6)", color: "#fff" }}
               >
                 ✕
