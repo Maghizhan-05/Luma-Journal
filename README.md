@@ -87,7 +87,7 @@ scroll-reveal animations inspired by editorial product sites.
 | Backend | **Supabase** — Postgres, Auth, Storage, Row-Level Security |
 | Auth/session | `@supabase/ssr` cookie sessions; route protection via Next 16 **`proxy.ts`** |
 | Email | **Resend** (transactional) |
-| Scheduling | **Vercel Cron** → `/api/cron/reminders` (hourly, timezone-aware) |
+| Scheduling | **Vercel Cron** → `/api/cron/reminders` (daily) |
 | Motion | **Framer Motion** |
 | Drag & drop | **dnd-kit** |
 | Images | **browser-image-compression** (client-side) |
@@ -149,14 +149,15 @@ npm run start
 
 ## ✉️ Email reminders
 
-`/api/cron/reminders` runs **hourly** and, for each user whose local time is the
-reminder hour, sends a nudge **only if they haven't opened LUMA that day** — a
-daily nudge on weekdays and a weekly digest on Sundays. Sends are de-duplicated
-via the `reminder_log` table and only go to confirmed email addresses.
+`/api/cron/reminders` runs **once a day** and sends each user a nudge **only if
+they haven't opened LUMA that day** — a daily nudge, or a weekly digest on
+Sundays. Sends are de-duplicated via the `reminder_log` table and only go to
+confirmed email addresses.
 
-- Scheduling is configured in [`vercel.json`](vercel.json) (`0 * * * *`).
+- Scheduling is configured in [`vercel.json`](vercel.json) (`0 20 * * *`) — a
+  single daily run, which fits Vercel's Hobby plan.
 - Vercel Cron authenticates with `Authorization: Bearer $CRON_SECRET`.
-- Test locally without sending: `GET /api/cron/reminders?secret=…&dry=1&force=1`.
+- Test locally without sending: `GET /api/cron/reminders?secret=…&dry=1`.
 
 Users manage (or disable) reminders on their **Profile** page.
 

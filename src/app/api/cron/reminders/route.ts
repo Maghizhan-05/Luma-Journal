@@ -1,14 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { dateInTz, hourInTz, weekdayInTz } from "@/lib/date";
+import { dateInTz, weekdayInTz } from "@/lib/date";
 import { sendEmail } from "@/lib/email/send";
 import { dailyReminder, weeklyReminder } from "@/lib/email/templates";
 
 export const dynamic = "force-dynamic";
 
-// Hour (local to each user) at which nudges go out. The cron runs hourly and
-// only the users whose local time is this hour are considered each run.
-const REMINDER_HOUR = 20;
+// Runs once a day (Vercel Hobby allows daily crons): every user who hasn't
+// opened LUMA that day gets a nudge on this run, deduped via reminder_log.
 
 function authorized(req: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
@@ -24,7 +23,6 @@ export async function GET(req: NextRequest) {
   }
 
   const dry = req.nextUrl.searchParams.get("dry") === "1";
-  const force = req.nextUrl.searchParams.get("force") === "1"; // ignore the hour gate (testing)
   const now = new Date();
   const admin = createAdminClient();
 
@@ -42,8 +40,6 @@ export async function GET(req: NextRequest) {
   for (const p of profiles ?? []) {
     checked += 1;
     const tz = p.timezone || "UTC";
-    if (!force && hourInTz(now, tz) !== REMINDER_HOUR) continue;
-
     const localDate = dateInTz(now, tz);
     const seenToday = p.last_seen_at && dateInTz(new Date(p.last_seen_at), tz) === localDate;
     if (seenToday) continue; // already active today → no nudge
@@ -82,7 +78,6 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     dryRun: dry,
-    hourGate: force ? "ignored" : REMINDER_HOUR,
     checked,
     eligible: results.length,
     sent: results.filter((r) => r.sent).length,
